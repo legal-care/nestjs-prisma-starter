@@ -15,6 +15,11 @@ export class AppController {
     return this.appService.getHelloName(name);
   }
 
+  @Get('goodbye/:name')
+  getGoodbyeName(@Param('name') name: string): string {
+    return this.appService.getGoodbyeName(name);
+  }
+
   @Get('health')
   getHealth(): string {
     return this.appService.getHealth();

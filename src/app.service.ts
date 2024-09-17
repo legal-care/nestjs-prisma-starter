@@ -10,6 +10,10 @@ export class AppService {
     return `Hello ${name}!!!!`;
   }
 
+  getGoodbyeName(name: string): string {
+    return `Goodbye ${name}!!!!`;
+  }
+
   getHealth(): string {
     return 'ok';
   }
