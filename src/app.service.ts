@@ -9,4 +9,8 @@ export class AppService {
   getHelloName(name: string): string {
     return `Hello ${name}!`;
   }
+
+  getHealth(): string {
+    return 'ok';
+  }
 }

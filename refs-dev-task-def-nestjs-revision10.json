@@ -1,0 +1,99 @@
+{
+    "taskDefinitionArn": "arn:aws:ecs:ap-northeast-2:074185958044:task-definition/refs-dev-task-def-nestjs:10",
+    "containerDefinitions": [
+        {
+            "name": "nestjs-prisma-starter",
+            "image": "074185958044.dkr.ecr.ap-northeast-2.amazonaws.com/refs/nestjs-prisma-starter",
+            "cpu": 1024,
+            "memory": 2048,
+            "memoryReservation": 2048,
+            "portMappings": [
+                {
+                    "name": "nestjs-prisma-starter-3000-tcp",
+                    "containerPort": 3000,
+                    "hostPort": 3000,
+                    "protocol": "tcp",
+                    "appProtocol": "http"
+                }
+            ],
+            "essential": true,
+            "environment": [],
+            "environmentFiles": [],
+            "mountPoints": [],
+            "volumesFrom": [],
+            "ulimits": [],
+            "logConfiguration": {
+                "logDriver": "awslogs",
+                "options": {
+                    "awslogs-group": "/ecs/refs-dev-task-def-nestjs",
+                    "mode": "non-blocking",
+                    "awslogs-create-group": "true",
+                    "max-buffer-size": "25m",
+                    "awslogs-region": "ap-northeast-2",
+                    "awslogs-stream-prefix": "ecs"
+                },
+                "secretOptions": []
+            },
+            "systemControls": []
+        }
+    ],
+    "family": "refs-dev-task-def-nestjs",
+    "taskRoleArn": "arn:aws:iam::074185958044:role/refs-dev-task-execution-role",
+    "executionRoleArn": "arn:aws:iam::074185958044:role/refs-dev-task-execution-role",
+    "networkMode": "awsvpc",
+    "revision": 10,
+    "volumes": [],
+    "status": "ACTIVE",
+    "requiresAttributes": [
+        {
+            "name": "com.amazonaws.ecs.capability.logging-driver.awslogs"
+        },
+        {
+            "name": "ecs.capability.execution-role-awslogs"
+        },
+        {
+            "name": "com.amazonaws.ecs.capability.ecr-auth"
+        },
+        {
+            "name": "com.amazonaws.ecs.capability.docker-remote-api.1.19"
+        },
+        {
+            "name": "com.amazonaws.ecs.capability.docker-remote-api.1.28"
+        },
+        {
+            "name": "com.amazonaws.ecs.capability.docker-remote-api.1.21"
+        },
+        {
+            "name": "com.amazonaws.ecs.capability.task-iam-role"
+        },
+        {
+            "name": "ecs.capability.execution-role-ecr-pull"
+        },
+        {
+            "name": "com.amazonaws.ecs.capability.docker-remote-api.1.18"
+        },
+        {
+            "name": "ecs.capability.task-eni"
+        },
+        {
+            "name": "com.amazonaws.ecs.capability.docker-remote-api.1.29"
+        }
+    ],
+    "placementConstraints": [],
+    "compatibilities": [
+        "EC2",
+        "FARGATE"
+    ],
+    "requiresCompatibilities": [
+        "FARGATE"
+    ],
+    "cpu": "1024",
+    "memory": "2048",
+    "runtimePlatform": {
+        "cpuArchitecture": "X86_64",
+        "operatingSystemFamily": "LINUX"
+    },
+    "registeredAt": "2024-09-13T11:37:14.761Z",
+    "registeredBy": "arn:aws:iam::074185958044:user/darwin",
+    "tags": []
+}
