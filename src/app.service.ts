@@ -7,10 +7,12 @@ export class AppService {
   }
 
   getHelloName(name: string): string {
+    console.log(`[app/service] hello ${name}`);
     return `Hello ${name}!!!!`;
   }
 
   getGoodbyeName(name: string): string {
+    console.log(`[app/service] goodbye ${name}`);
     return `Goodbye ${name}!!!!`;
   }
 
