@@ -8,7 +8,7 @@ export class AppService {
 
   getHelloName(name: string): string {
     console.log(`[app/service] hello ${name}`);
-    return `Hello ${name}!!!!@@@@####`;
+    return `Hello ${name}!!!!@@@@#### with Jira Integration`;
   }
 
   getGoodbyeName(name: string): string {
