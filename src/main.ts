@@ -1,4 +1,4 @@
-import { ValidationPipe } from '@nestjs/common';
+import { Logger, ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { HttpAdapterHost, NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
@@ -46,5 +46,7 @@ async function bootstrap() {
   }
 
   await app.listen(process.env.PORT || nestConfig.port || 3000);
+
+  Logger.log(`🚀 Application is running on: ${await app.getUrl()}`);
 }
 bootstrap();

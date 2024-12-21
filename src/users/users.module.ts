@@ -9,5 +9,4 @@ import { PasswordService } from '../auth/password.service';
   controllers: [UsersController],
   providers: [UsersResolver, UsersService, PasswordService],
 })
-
 export class UsersModule {}

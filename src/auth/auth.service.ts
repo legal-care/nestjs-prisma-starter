@@ -6,6 +6,7 @@ import {
   BadRequestException,
   ConflictException,
   UnauthorizedException,
+  Logger,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
@@ -110,6 +111,7 @@ export class AuthService {
         userId,
       });
     } catch (e) {
+      Logger.error(e);
       throw new UnauthorizedException();
     }
   }

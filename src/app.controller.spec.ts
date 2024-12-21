@@ -25,7 +25,9 @@ describe('AppController', () => {
   describe('hello/:name', () => {
     it('should return "Hello ${name}!"', () => {
       const name = chance.name();
-      expect(appController.getHelloName(name)).toBe(`Hello ${name}!!!!@@@@#### with Jira Integration with PR`);
+      expect(appController.getHelloName(name)).toBe(
+        `Hello ${name}!!!!@@@@#### with Jira Integration with PR`,
+      );
     });
   });
 });

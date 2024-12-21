@@ -24,7 +24,9 @@ describe('AppResolver', () => {
   describe('hello', () => {
     it('should return "Hello ${name}!"', () => {
       const name = chance.name();
-      expect(appResolver.hello(name)).toBe(`Hello ${name}!!!!@@@@#### with Jira Integration`);
+      expect(appResolver.hello(name)).toBe(
+        `Hello ${name}!!!!@@@@#### with Jira Integration`,
+      );
     });
   });
 });
