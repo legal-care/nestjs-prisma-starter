@@ -12,29 +12,28 @@ export class UsersService {
   ) {}
 
   async findAll() {
-    this.logger.debug('Fetching all users from database', 'UsersService');
+    this.logger.log('Fetching all users from database', 'UsersService');
     return this.prisma.user.findMany();
   }
 
   async findOne(id: string) {
-    this.logger.debug(`Fetching user with id: ${id}`, 'UsersService');
+    this.logger.log(`Fetching user with id: ${id}`, 'UsersService');
     return this.prisma.user.findUnique({
       where: { id }
     });
   }
 
   async create(createUserDto: CreateUserDto) {
-    this.logger.debug('Creating new user in database', 'UsersService', { data: createUserDto });
+    this.logger.log('Creating new user in database', 'UsersService', { data: createUserDto });
     return this.prisma.user.create({
       data: {
         ...createUserDto,
-        role: 'USER'
       }
     });
   }
 
   async update(id: string, data: Prisma.UserUpdateInput) {
-    this.logger.debug(`Updating user ${id}`, 'UsersService', { data });
+    this.logger.log(`Updating user ${id}`, 'UsersService', { data });
     return this.prisma.user.update({
       where: { id },
       data
@@ -42,7 +41,7 @@ export class UsersService {
   }
 
   async remove(id: string) {
-    this.logger.debug(`Removing user ${id}`, 'UsersService');
+    this.logger.log(`Removing user ${id}`, 'UsersService');
     return this.prisma.user.delete({
       where: { id }
     });

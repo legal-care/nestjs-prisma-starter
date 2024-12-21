@@ -42,7 +42,7 @@ export class UsersController {
 
     try {
       const user = await this.usersService.create(createUserDto);
-      this.logger.debug('User created successfully', 'UsersController', {
+      this.logger.log('User created successfully', 'UsersController', {
         userId: user.id
       });
       return user;
