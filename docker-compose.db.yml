@@ -1,11 +1,15 @@
 version: '3.8'
 services:
   postgres:
-    image: postgres:15
-    container_name: postgres
+    image: postgres:latest
+    container_name: nestjs-postgres
+    environment:
+      POSTGRES_USER: user       # PostgreSQL 사용자 이름
+      POSTGRES_PASSWORD: password     # PostgreSQL 비밀번호
+      POSTGRES_DB: blog      # 생성할 데이터베이스 이름    
     restart: always
     ports:
-      - '5432:5432'
+      - '5434:5432'
     env_file:
       - .env
     volumes:
@@ -13,4 +17,4 @@ services:
 
 volumes:
   postgres:
-    name: nest-db
+    name: nestjs-db
