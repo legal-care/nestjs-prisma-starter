@@ -1,6 +1,5 @@
 import { Injectable, LogLevel } from '@nestjs/common';
 import * as winston from 'winston';
-import * as WinstonCloudWatch from 'winston-cloudwatch';
 
 @Injectable()
 export class CustomLogger {
@@ -10,29 +9,21 @@ export class CustomLogger {
     this.logger = winston.createLogger({
       format: winston.format.combine(
         winston.format.timestamp(),
-        winston.format.json()
-      ),
-      defaultMeta: {
-        service: process.env.SERVICE_NAME || 'nestjs-app',
-        environment: process.env.NODE_ENV
-      },
-      transports: [
-        new winston.transports.Console({
-          format: winston.format.simple()
-        }),
-        new WinstonCloudWatch({
-          logGroupName: process.env.CLOUDWATCH_GROUP_NAME,
-          logStreamName: `${process.env.SERVICE_NAME}-${process.env.NODE_ENV}`,
-          awsRegion: process.env.AWS_REGION,
-          messageFormatter: ({ level, message, ...meta }) => {
-            return JSON.stringify({
-              level,
-              message,
-              ...meta,
-              timestamp: new Date().toISOString()
-            });
-          }
+        winston.format.colorize(),
+        winston.format.json(),
+        winston.format.printf(({ timestamp, level, message, ...meta }) => {
+          return JSON.stringify({
+            timestamp,
+            level,
+            message,
+            service: process.env.SERVICE_NAME || 'nestjs-app',
+            environment: process.env.NODE_ENV,
+            ...meta
+          });
         })
+      ),
+      transports: [
+        new winston.transports.Console()
       ]
     });
   }

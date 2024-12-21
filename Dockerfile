@@ -1,6 +1,8 @@
 # Build stage
 FROM node:22-alpine AS builder
 
+RUN apk add --no-cache openssl openssl-dev
+
 # Set working directory
 WORKDIR /app
 
@@ -16,50 +18,44 @@ RUN npm ci
 # Copy source files
 COPY . .
 
+# Generate Prisma client with specific schema path
+RUN npx prisma generate --schema=src/prisma/schema.prisma
+
 # Build the application
 RUN npm run build
 
 # Production stage
-FROM node:22-alpine
+FROM node:22-alpine AS production
+
+RUN apk add --no-cache openssl
 
 # Set working directory
 WORKDIR /app
 
-# Copy built assets from the builder stage
-COPY --from=builder /app/node_modules ./node_modules
-COPY --from=builder /app/package*.json ./
+# Copy package files
+COPY package*.json ./
+
+# Install only production dependencies
+RUN npm ci --only=production
+
+# Copy only necessary files from the build stage (minimal production build)
 COPY --from=builder /app/dist ./dist
-COPY --from=builder /app/prisma ./prisma
+COPY --from=builder /app/node_modules/.prisma ./node_modules/.prisma
+COPY --from=builder /app/node_modules/@prisma ./node_modules/@prisma
 
-# Expose the port the app runs on
-# EXPOSE 3000
+# Define the ARG for NODE_ENV, with a default value of 'production'
+ARG NODE_ENV=production
+ENV NODE_ENV=${NODE_ENV}
 
-# Set Node.js to run in production mode
-ENV NODE_ENV=production
+# Copy Prisma schema and migrations (if needed)
+COPY src/prisma/schema.prisma ./src/prisma/
+COPY src/prisma/migrations ./src/prisma/migrations
 
-# POSTGRES
-# ENV POSTGRES_USER=user
-# ENV POSTGRES_PASSWORD=password
-# ENV POSTGRES_DB=blog
+# Copy base .env file first
+COPY ./.env /app/.env
 
-# Nest run locally
-# ENV DB_HOST=localhost
-# Nest run in docker, change host to database container name
-# DB_HOST=postgres
-# ENV DB_HOST=postgres
-# ENV DB_PORT=5432
-# ENV DB_SCHEMA=public
-
-# Prisma database connection
-# ENV DATABASE_URL=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${DB_HOST}:${DB_PORT}/${POSTGRES_DB}?schema=${DB_SCHEMA}&sslmode=prefer
-
-# Nest
-# ENV PORT=9999
-
-# Security
-# ENV JWT_ACCESS_SECRET=nestjsPrismaAccessSecret
-# ENV JWT_REFRESH_SECRET=nestjsPrismaRefreshSecret
-
+# Then copy environment specific .env file to overlay additional configs
+COPY ./.env.${NODE_ENV} /app/.env.${NODE_ENV}
 
 # Run the application
 CMD ["npm", "run", "start:prod"]

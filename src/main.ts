@@ -11,7 +11,7 @@ import type {
   NestConfig,
   SwaggerConfig,
 } from './common/configs/config.interface';
-import { CustomLogger } from './common/services/logger.service';
+import { CustomLogger } from './common/logger/logger.service';
 
 const baseEnvPath = path.resolve(__dirname, '../.env'); // Load base .env file first
 dotenv.config({ path: baseEnvPath });
@@ -23,7 +23,7 @@ dotenv.config({ path: envPath, override: true });
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
-    logger: false // NestJS 기본 로거 비활성화
+    bufferLogs: true  // logger: false 대신 bufferLogs: true 사용
   });
 
   const logger = app.get(CustomLogger);

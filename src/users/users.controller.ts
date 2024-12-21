@@ -1,6 +1,6 @@
 import { CreateUserDto } from './dto/create-user.dto';
 import { Controller, Get, Post, Body, Param, Delete, Injectable } from '@nestjs/common';
-import { CustomLogger } from '../common/services/logger.service';
+import { CustomLogger } from '../common/logger/logger.service';
 import { UsersService } from './users.service';
 import { User } from '@prisma/client';
 
@@ -14,7 +14,7 @@ export class UsersController {
   ) {}
 
   @Get()
-  async findAll() {
+  async findAll(): Promise<User[]> {
     this.logger.log('Fetching all users', 'UsersController', {
       endpoint: '/users',
       method: 'GET'

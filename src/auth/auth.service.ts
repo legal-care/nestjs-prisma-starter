@@ -14,7 +14,7 @@ import { PasswordService } from './password.service';
 import { SignupInput } from './dto/signup.input';
 import { Token } from './models/token.model';
 import { SecurityConfig } from '../common/configs/config.interface';
-import { CustomLogger } from '../common/services/logger.service';
+import { CustomLogger } from '../common/logger/logger.service';
 
 @Injectable()
 export class AuthService {
