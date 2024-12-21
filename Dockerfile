@@ -38,16 +38,17 @@ EXPOSE 3000
 ENV NODE_ENV=production
 
 # POSTGRES
-ENV POSTGRES_USER=prisma
-ENV POSTGRES_PASSWORD=topsecret
+ENV POSTGRES_USER=user
+ENV POSTGRES_PASSWORD=password
 ENV POSTGRES_DB=blog
 
 # Nest run locally
-ENV DB_HOST=localhost
+# ENV DB_HOST=localhost
 # Nest run in docker, change host to database container name
 # DB_HOST=postgres
+ENV DB_HOST=postgres
 ENV DB_PORT=5432
-ENV DB_SCHEMA=blog
+ENV DB_SCHEMA=public
 
 # Prisma database connection
 ENV DATABASE_URL=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${DB_HOST}:${DB_PORT}/${POSTGRES_DB}?schema=${DB_SCHEMA}&sslmode=prefer

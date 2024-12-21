@@ -1,14 +1,27 @@
+import path from 'path';
 import { Logger, ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { HttpAdapterHost, NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { PrismaClientExceptionFilter } from 'nestjs-prisma';
+import dotenv from 'dotenv';
 import { AppModule } from './app.module';
 import type {
   CorsConfig,
   NestConfig,
   SwaggerConfig,
 } from './common/configs/config.interface';
+
+const baseEnvPath = path.resolve(__dirname, '../.env'); // Load base .env file first
+dotenv.config({ path: baseEnvPath });
+Logger.log(`Loading base environment variables from ${baseEnvPath}`);
+
+// Then load environment specific .env file
+const nodeEnv = process.env.NODE_ENV || 'local';
+const envPath = path.resolve(__dirname, `../.env.${nodeEnv}`);
+dotenv.config({ path: envPath, override: true });
+
+Logger.log(`Loading environment variables NODE_ENV: ${process.env.NODE_ENV}`);
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);

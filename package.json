@@ -19,11 +19,11 @@
   "bugs": {
     "url": "https://github.com/fivethree-team/nestjs-prisma-client-example/issues"
   },
-  "type": "module",
   "scripts": {
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "nest start",
+    "start:local": "NODE_ENV=local nest start --watch",
     "start:dev": "nest start --watch",
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/main",
@@ -67,6 +67,7 @@
     "bcrypt": "5.1.1",
     "class-transformer": "0.5.1",
     "class-validator": "0.14.1",
+    "dotenv": "16.4.7",
     "graphql": "16.10.0",
     "graphql-scalars": "1.24.0",
     "graphql-subscriptions": "3.0.0",
