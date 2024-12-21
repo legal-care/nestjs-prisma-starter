@@ -34,7 +34,7 @@ export class UsersResolver {
     @UserEntity() user: User,
     @Args('data') newUserData: UpdateUserInput,
   ) {
-    return this.usersService.updateUser(user.id, newUserData);
+    return this.usersService.update(user.id, newUserData);
   }
 
   @UseGuards(GqlAuthGuard)
@@ -43,11 +43,9 @@ export class UsersResolver {
     @UserEntity() user: User,
     @Args('data') changePassword: ChangePasswordInput,
   ) {
-    return this.usersService.changePassword(
-      user.id,
-      user.password,
-      changePassword,
-    );
+    return this.usersService.update(user.id, {
+      password: changePassword.newPassword,
+    });
   }
 
   @ResolveField('posts')

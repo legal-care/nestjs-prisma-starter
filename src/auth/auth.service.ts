@@ -14,6 +14,7 @@ import { PasswordService } from './password.service';
 import { SignupInput } from './dto/signup.input';
 import { Token } from './models/token.model';
 import { SecurityConfig } from '../common/configs/config.interface';
+import { CustomLogger } from '../common/services/logger.service';
 
 @Injectable()
 export class AuthService {
@@ -22,6 +23,7 @@ export class AuthService {
     private readonly prisma: PrismaService,
     private readonly passwordService: PasswordService,
     private readonly configService: ConfigService,
+    private readonly logger: CustomLogger,
   ) {}
 
   async createUser(payload: SignupInput): Promise<Token> {
@@ -53,6 +55,7 @@ export class AuthService {
   }
 
   async login(email: string, password: string): Promise<Token> {
+    this.logger.debug('Processing login request', 'AuthService', { email });
     const user = await this.prisma.user.findUnique({ where: { email } });
 
     if (!user) {
@@ -68,12 +71,14 @@ export class AuthService {
       throw new BadRequestException('Invalid password');
     }
 
+    this.logger.log('Login successful', 'AuthService', { userId: user.id });
     return this.generateTokens({
       userId: user.id,
     });
   }
 
   validateUser(userId: string): Promise<User> {
+    this.logger.debug('Attempting to validate user', 'AuthService', { userId });
     return this.prisma.user.findUnique({ where: { id: userId } });
   }
 

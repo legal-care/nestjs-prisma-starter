@@ -11,20 +11,26 @@ import type {
   NestConfig,
   SwaggerConfig,
 } from './common/configs/config.interface';
+import { CustomLogger } from './common/services/logger.service';
 
 const baseEnvPath = path.resolve(__dirname, '../.env'); // Load base .env file first
 dotenv.config({ path: baseEnvPath });
-Logger.log(`Loading base environment variables from ${baseEnvPath}`);
 
 // Then load environment specific .env file
 const nodeEnv = process.env.NODE_ENV || 'local';
 const envPath = path.resolve(__dirname, `../.env.${nodeEnv}`);
 dotenv.config({ path: envPath, override: true });
 
-Logger.log(`Loading environment variables NODE_ENV: ${process.env.NODE_ENV}`);
-
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, {
+    logger: false // NestJS 기본 로거 비활성화
+  });
+
+  const logger = app.get(CustomLogger);
+  app.useLogger(logger);
+
+  logger.log(`Loading base environment variables from ${baseEnvPath}`);
+  logger.log(`Loading environment variables NODE_ENV: ${process.env.NODE_ENV}`);
 
   // Validation
   app.useGlobalPipes(new ValidationPipe());
@@ -60,6 +66,6 @@ async function bootstrap() {
 
   await app.listen(process.env.PORT || nestConfig.port || 3000);
 
-  Logger.log(`🚀 Application is running on: ${await app.getUrl()}`);
+  logger.log(`🚀 Application is running on: ${await app.getUrl()}`, 'Bootstrap');
 }
 bootstrap();

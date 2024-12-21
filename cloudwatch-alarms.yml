@@ -1,0 +1,26 @@
+Resources:
+  ErrorLogAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: ${ServiceName}-ErrorLogAlarm
+      AlarmDescription: Alert when error logs exceed threshold
+      MetricName: ErrorCount
+      Namespace: CustomMetrics
+      Statistic: Sum
+      Period: 300
+      EvaluationPeriods: 1
+      Threshold: 5
+      ComparisonOperator: GreaterThanThreshold
+      AlarmActions:
+        - ${ErrorNotificationTopicArn}
+      Dimensions:
+        - Name: ServiceName
+          Value: ${ServiceName}
+
+  ErrorNotificationTopic:
+    Type: AWS::SNS::Topic
+    Properties:
+      DisplayName: Error Notification Topic
+      Subscription:
+        - Protocol: email
+          Endpoint: ${ErrorNotificationEmail}

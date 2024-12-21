@@ -1,59 +1,50 @@
+import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'nestjs-prisma';
-import { Injectable, BadRequestException } from '@nestjs/common';
-import { PasswordService } from '../auth/password.service';
-import { ChangePasswordInput } from './dto/change-password.input';
-import { UpdateUserInput } from './dto/update-user.input';
-import { User } from '@prisma/client';
+import { CustomLogger } from '../common/services/logger.service';
+import { User, Prisma } from '@prisma/client';
+import { CreateUserDto } from './dto/create-user.dto';
 
 @Injectable()
 export class UsersService {
   constructor(
     private prisma: PrismaService,
-    private passwordService: PasswordService,
+    private logger: CustomLogger
   ) {}
 
-  async createUser(user: User): Promise<User> {
-    return await this.prisma.user.create({
-      data: user,
+  async findAll() {
+    this.logger.debug('Fetching all users from database', 'UsersService');
+    return this.prisma.user.findMany();
+  }
+
+  async findOne(id: string) {
+    this.logger.debug(`Fetching user with id: ${id}`, 'UsersService');
+    return this.prisma.user.findUnique({
+      where: { id }
     });
   }
 
-  updateUser(userId: string, newUserData: UpdateUserInput) {
-    return this.prisma.user.update({
-      data: newUserData,
-      where: {
-        id: userId,
-      },
-    });
-  }
-
-  async changePassword(
-    userId: string,
-    userPassword: string,
-    changePassword: ChangePasswordInput,
-  ) {
-    const passwordValid = await this.passwordService.validatePassword(
-      changePassword.oldPassword,
-      userPassword,
-    );
-
-    if (!passwordValid) {
-      throw new BadRequestException('Invalid password');
-    }
-
-    const hashedPassword = await this.passwordService.hashPassword(
-      changePassword.newPassword,
-    );
-
-    return this.prisma.user.update({
+  async create(createUserDto: CreateUserDto) {
+    this.logger.debug('Creating new user in database', 'UsersService', { data: createUserDto });
+    return this.prisma.user.create({
       data: {
-        password: hashedPassword,
-      },
-      where: { id: userId },
+        ...createUserDto,
+        role: 'USER'
+      }
     });
   }
 
-  async getUsers(): Promise<User[]> {
-    return await this.prisma.user.findMany();
+  async update(id: string, data: Prisma.UserUpdateInput) {
+    this.logger.debug(`Updating user ${id}`, 'UsersService', { data });
+    return this.prisma.user.update({
+      where: { id },
+      data
+    });
+  }
+
+  async remove(id: string) {
+    this.logger.debug(`Removing user ${id}`, 'UsersService');
+    return this.prisma.user.delete({
+      where: { id }
+    });
   }
 }
