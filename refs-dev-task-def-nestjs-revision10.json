@@ -9,9 +9,9 @@
             "memoryReservation": 2048,
             "portMappings": [
                 {
-                    "name": "nestjs-prisma-starter-9999-tcp",
-                    "containerPort": 9999,
-                    "hostPort": 9999,
+                    "name": "nestjs-prisma-starter-3000-tcp",
+                    "containerPort": 3000,
+                    "hostPort": 3000,
                     "protocol": "tcp",
                     "appProtocol": "http"
                 }
