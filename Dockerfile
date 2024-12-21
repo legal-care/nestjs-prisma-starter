@@ -44,6 +44,8 @@ COPY --from=builder /app/node_modules/@prisma ./node_modules/@prisma
 ARG NODE_ENV=production
 ENV NODE_ENV=${NODE_ENV}
 
+ENV PORT=9999
+
 # Copy Prisma schema and migrations (if needed)
 COPY src/prisma/schema.prisma ./src/prisma/
 COPY src/prisma/migrations ./src/prisma/migrations
