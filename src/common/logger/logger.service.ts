@@ -9,7 +9,6 @@ export class CustomLogger {
     this.logger = winston.createLogger({
       format: winston.format.combine(
         winston.format.timestamp(),
-        winston.format.colorize(),
         winston.format.json(),
         winston.format.printf(({ timestamp, level, message, ...meta }) => {
           return JSON.stringify({
