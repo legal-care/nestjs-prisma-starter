@@ -12,6 +12,7 @@ import type {
   SwaggerConfig,
 } from './common/configs/config.interface';
 import { CustomLogger } from './common/logger/logger.service';
+import { ValidationExceptionFilter } from './common/filters/validation.filter';
 
 const baseEnvPath = path.resolve(__dirname, '../.env'); // Load base .env file first
 dotenv.config({ path: baseEnvPath });
@@ -33,7 +34,11 @@ async function bootstrap() {
   logger.log(`Loading environment variables NODE_ENV: ${process.env.NODE_ENV}`);
 
   // Validation
-  app.useGlobalPipes(new ValidationPipe());
+  app.useGlobalPipes(new ValidationPipe({
+    transform: true,
+    whitelist: true,
+    forbidNonWhitelisted: true
+  }));
 
   // enable shutdown hook
   app.enableShutdownHooks();
@@ -63,6 +68,8 @@ async function bootstrap() {
   if (corsConfig.enabled) {
     app.enableCors();
   }
+
+  app.useGlobalFilters(new ValidationExceptionFilter(logger));
 
   await app.listen(process.env.PORT || nestConfig.port || 3000);
 

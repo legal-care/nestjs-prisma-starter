@@ -1,11 +1,31 @@
 Resources:
+  ErrorLogMetricFilter:
+    Type: AWS::Logs::MetricFilter
+    Properties:
+      LogGroupName: ${CLOUDWATCH_GROUP_NAME}
+      FilterPattern: '{ $.level = "error" }'
+      MetricTransformations:
+        - MetricName: ErrorCount
+          MetricNamespace: ${ServiceName}/Logs
+          MetricValue: 1
+
+  HighLatencyMetricFilter:
+    Type: AWS::Logs::MetricFilter
+    Properties:
+      LogGroupName: ${CLOUDWATCH_GROUP_NAME}
+      FilterPattern: '{ $.duration > 1000 }'
+      MetricTransformations:
+        - MetricName: HighLatencyCount
+          MetricNamespace: ${ServiceName}/Logs
+          MetricValue: 1
+
   ErrorLogAlarm:
     Type: AWS::CloudWatch::Alarm
     Properties:
       AlarmName: ${ServiceName}-ErrorLogAlarm
       AlarmDescription: Alert when error logs exceed threshold
       MetricName: ErrorCount
-      Namespace: CustomMetrics
+      Namespace: ${ServiceName}/Logs
       Statistic: Sum
       Period: 300
       EvaluationPeriods: 1
